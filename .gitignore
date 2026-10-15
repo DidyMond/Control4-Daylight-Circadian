@@ -1,0 +1,32 @@
+# Build output: i .c4z non si committano, si allegano alle GitHub Releases
+releases/*.c4z
+
+# Documenti di lavoro interni: restano solo in locale
+docs/SPEC.md
+docs/UI-SPEC.md
+docs/REFERENCE_ANALYSIS.md
+docs/mockups/
+CLAUDE.md
+TODO*.md
+
+# Materiale di terze parti non ridistribuibile (prior art commerciale)
+references/
+
+# Strumenti e file locali
+.codegraph/
+.vscode/
+.idea/
+node_modules/
+.env
+.env.*
+*.local
+*.bak
+*.tmp
+*.old
+*.scratch
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc

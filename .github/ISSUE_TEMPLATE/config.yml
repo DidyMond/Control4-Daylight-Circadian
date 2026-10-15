@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentazione / Documentation
+    url: https://github.com/DidyMond/Control4-Daylight-Circadian/blob/main/README.md
+    about: README, esempio di schedule e architettura prima di aprire una issue. / README, example schedule and architecture before opening an issue.

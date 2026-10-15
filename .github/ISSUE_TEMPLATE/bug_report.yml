@@ -1,0 +1,103 @@
+name: Bug report / Segnalazione bug
+description: Report something that does not work as expected / Segnala qualcosa che non funziona come previsto
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la segnalazione. Più i dati sono precisi (versioni, configurazione, **log**), più è rapido capire il problema.
+        *Thanks for reporting. The more precise the data (versions, configuration, **logs**), the faster the problem can be understood.*
+
+        **Privacy:** i log contengono la posizione del progetto (righe `[ASTRO] … lat=… lon=…`). Cancella o arrotonda latitudine e longitudine prima di incollarli.
+        *Logs contain the project location (`[ASTRO] … lat=… lon=…` lines). Remove or round latitude and longitude before pasting them.*
+  - type: dropdown
+    id: component
+    attributes:
+      label: Componente / Component
+      options:
+        - Controller (daylight_circadian_controller)
+        - Webview (daylight_circadian_webview)
+        - Entrambi / Both
+        - Non so / Not sure
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versioni dei driver / Driver versions
+      description: Proprietà *Driver Version* di ciascun driver in Composer. / The *Driver Version* property of each driver in Composer.
+      placeholder: "controller 261015001, webview 261015001"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente / Environment
+      description: Control4 OS, Composer Pro, dove vedi il problema (pannello, app iOS/Android, Composer). / Control4 OS, Composer Pro, where you see the problem (panel, iOS/Android app, Composer).
+      placeholder: "OS 3.4.3, Composer Pro 3.4.3, T4 8\""
+    validations:
+      required: true
+  - type: textarea
+    id: lights
+    attributes:
+      label: Luci controllate / Controlled lights
+      description: Marca e modello, driver (nativo Light V2 o di terze parti), range di temperatura colore. / Brand and model, driver (native Light V2 or third-party), colour-temperature range.
+      placeholder: "Es. 4 lampadine tunable white 2700–6500 K, driver Zigbee …"
+  - type: textarea
+    id: config
+    attributes:
+      label: Configurazione del controller / Controller configuration
+      description: |
+        *Scheduler Mode*, *Number of Switchpoints*, limiti di temperatura colore, ogni `SP n …` (tipo, riferimento, offset, luminosità, CCT), *Smart Light Level Monitoring*, *Preset Colour While Lights Are Off*, *Fade Time*, *Debounce Time*.
+        / The same properties, as you set them.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Cosa succede / What happens
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Come riprodurlo / Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento atteso / Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log
+      description: |
+        In Composer imposta *Log Mode* = `Print` e *Log Level* = `4 - Trace` (o `3 - Info` per una osservazione lunga), poi copia dal Lua Output le righe attorno al problema, con qualche riga prima e dopo.
+        / In Composer set *Log Mode* = `Print` and *Log Level* = `4 - Trace` (or `3 - Info` for a long observation), then copy the lines around the problem from the Lua Output, with a few lines before and after.
+
+        - **Luci / lights:** righe `[MONITOR]`, `[APPLY]`, `[SEND]`, `[PROBE]`.
+        - **Webview:** apri la pagina con `index.html?debug=1` e copia le righe della pagina con `TIMEOUT`; dal Lua Output del webview `[HUB]` e dal controller `[COMMS]` con lo stesso `rid` / `id=wN`.
+        - **Avvio / startup:** `[LIFECYCLE]`, `[STATE]`, `[ASTRO]` (senza coordinate / without coordinates), `[SCHEDULE]`.
+      render: text
+  - type: textarea
+    id: extra
+    attributes:
+      label: Altro / Anything else
+      description: Screenshot, quando succede (ora, dopo un restart, dopo un power-cycle…), da quanto. / Screenshots, when it happens (time of day, after a restart or power-cycle…), since when.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Prima di inviare / Before submitting
+      options:
+        - label: Ho cercato fra le issue esistenti. / I searched the existing issues.
+          required: true
+        - label: Ho tolto latitudine e longitudine dai log. / I removed latitude and longitude from the logs.
+          required: true
