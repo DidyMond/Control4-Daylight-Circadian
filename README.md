@@ -85,6 +85,10 @@ panel e app mobile.
   (default `Off`) invia la CCT anche alle luci spente: il proxy Light V2 la memorizza e la applica
   all'accensione, senza accendere la luce. **Dipende dal driver di ogni luce**: provala prima su una
   luce, di giorno, e controlla che resti spenta.
+- **Configurazione dei driver delle luci (con `Preset Colour While Lights Are Off` attivo).** Nelle
+  proprietà di ogni luce controllata, in Composer, imposta **Color On Mode = Previous** e
+  **Brightness On Mode = Previous Level**: all'accensione la luce riprende il colore memorizzato,
+  cioè quello che il controller le ha inviato da spenta, invece di quello predefinito.
 
 ### Compatibilità
 
@@ -181,6 +185,10 @@ on touch panels and the mobile app.
   `Off`) also sends the CCT to switched-off lights: the Light V2 proxy stores it and applies it at
   turn-on, without turning the light on. **It depends on each light's driver**: try it on one light
   first, in daytime, and check that it stays off.
+- **Light driver configuration (with `Preset Colour While Lights Are Off` on).** In each controlled
+  light's properties in Composer, set **Color On Mode = Previous** and **Brightness On Mode =
+  Previous Level**: at turn-on the light takes the stored colour, i.e. the one the controller sent
+  it while off, instead of the default one.
 
 ### Compatibility
 

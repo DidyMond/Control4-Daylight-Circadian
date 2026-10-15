@@ -50,6 +50,8 @@ First public release.
 - Project latitude and longitude set, for astronomical switchpoints.
 - Some light drivers may turn a light on when they receive a colour while it is off: try
   **Preset Colour While Lights Are Off** on one light first.
+- With **Preset Colour While Lights Are Off** enabled, set the lights' **Color On Mode** to
+  `Previous` and **Brightness On Mode** to `Previous Level` in Composer (see the README).
 
 ### Known limitations
 - The Light V2 proxy reports no colour-temperature feedback: the controller compares against the last
