@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="color-scheme" content="dark">
+<title>Circadian OS</title>
+<link rel="stylesheet" href="css/nocturne-tokens.css?v=__BUILD__">
+<link rel="stylesheet" href="css/layout.css?v=__BUILD__">
+<link rel="stylesheet" href="css/components.css?v=__BUILD__">
+<link rel="stylesheet" href="css/circadian.css?v=__BUILD__">
+</head>
+<body>
+<div id="app">
+  <header class="topbar" id="topbar"></header>
+  <div class="conn-banner" id="banner" hidden></div>
+  <main class="main" id="main"></main>
+</div>
+<div id="sheet-root"></div>
+<div id="modal-root"></div>
+<div id="toast-root" aria-live="polite"></div>
+<pre id="debug-log" hidden></pre>
+
+<!-- script classici (niente moduli: i path controller:// non garantiscono il tipo MIME); ordine = dipendenze -->
+<script src="js/i18n.js?v=__BUILD__"></script>
+<script src="js/icons.js?v=__BUILD__"></script>
+<script src="js/util.js?v=__BUILD__"></script>
+<script src="js/widgets.js?v=__BUILD__"></script>
+<script src="js/glow-layer.js?v=__BUILD__"></script>
+<script src="js/bridge.js?v=__BUILD__"></script>
+<script src="js/curve-renderer.js?v=__BUILD__"></script>
+<script src="js/context-sheet.js?v=__BUILD__"></script>
+<script src="js/main.js?v=__BUILD__"></script>
+</body>
+</html>

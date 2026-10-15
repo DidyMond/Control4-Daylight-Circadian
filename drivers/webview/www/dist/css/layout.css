@@ -1,0 +1,270 @@
+/* ============================================================
+ * layout.css - griglia, TopBar, breakpoint, stati (skeleton / vuoto / toast / banner)
+ *
+ * Breakpoint (DESIGN.md §6):
+ *   < 900px      phone: colonna singola, padding ridotto, ContextSheet come bottom sheet
+ *   900-1919px   T4 8" / tablet: due colonne, TopBar floating, ContextSheet card 460px
+ *   >= 1920px    pannello grande: TopBar in riga fissa, ContextSheet 960px, superfici in vetro
+ * Regole di performance T4: niente backdrop-filter sotto 1920px, overscroll contenuto.
+ * ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--surface-lowest);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  overscroll-behavior: contain;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button:focus { outline: none; }
+button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+#app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(77, 142, 255, 0.07), transparent 60%),
+    var(--surface-lowest);
+}
+
+/* ---------------------------------------------------------------- TopBar */
+.topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  background: linear-gradient(to bottom, rgba(10, 13, 20, 0.96) 0%, rgba(10, 13, 20, 0.7) 60%, rgba(10, 13, 20, 0) 100%);
+  pointer-events: none;                         /* solo i figli interattivi ricevono i tocchi */
+}
+.topbar > * { pointer-events: auto; }
+.tb-left, .tb-right { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 0 0 auto; }
+.tb-left { justify-self: start; }
+.tb-right { justify-self: end; }
+.tb-center { flex: 1 1 auto; display: flex; justify-content: center; min-width: 0; position: relative; }
+@media (min-width: 900px) {
+  /* 3 colonne: senza titolo la pill resta al centro vero, qualunque sia la larghezza ai lati (badge anteprima) */
+  .topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .tb-center { flex: none; }
+}
+
+.conn-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--conn-wait);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+}
+.conn-dot[data-state="live"] { background: var(--conn-live); box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
+.conn-dot[data-state="error"] { background: var(--conn-error); box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+.conn-dot[data-state="wait"] { animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+.ctrl-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: var(--touch-min);
+  max-width: 100%;
+  padding: 0 14px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--hairline-hi);
+  background: var(--surface-container);
+  font-weight: 500; font-size: 14px;
+}
+.ctrl-pill svg { width: 16px; height: 16px; color: var(--on-surface-variant); flex: 0 0 auto; }
+.ctrl-pill .ctrl-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ctrl-pill .ctrl-chip {
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 2px 6px; border-radius: var(--r-sm);
+  background: var(--surface-highest); color: var(--on-surface-variant);
+}
+.ctrl-pill .chev { width: 14px; height: 14px; }
+.ctrl-pill[disabled] { cursor: default; }
+
+.icon-btn {
+  width: var(--touch-min); height: var(--touch-min);
+  border-radius: 50%;
+  border: 1px solid var(--hairline-hi);
+  background: var(--surface-container);
+  display: grid; place-items: center;
+  color: var(--on-surface-variant);
+  flex: 0 0 auto;
+}
+.icon-btn svg { width: 20px; height: 20px; }
+.icon-btn:active { background: var(--surface-high); }
+
+.badge-preview {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--error-container);
+  background: rgba(147, 0, 10, 0.35);
+  color: var(--on-error-container);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+}
+
+/* popover dei controller */
+.ctrl-menu {
+  position: absolute; top: calc(100% + 4px); left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px; max-width: 90vw;
+  padding: 6px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline-hi);
+  background: var(--surface-high);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+.ctrl-menu button {
+  display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: var(--touch-min); padding: 0 12px;
+  border-radius: var(--r-md); text-align: left;
+}
+.ctrl-menu button[aria-selected="true"] { background: var(--surface-highest); color: var(--primary); }
+.ctrl-menu .sub { font-family: var(--font-mono); font-size: 11px; color: var(--outline); }
+
+/* ---------------------------------------------------------------- Main */
+.main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 12px;
+  padding: calc(var(--topbar-h) + 8px) 12px 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (min-width: 1920px) {
+  .topbar {
+    position: relative;
+    flex: 0 0 var(--topbar-h);
+    background: var(--surface-low);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .main { padding: 16px; gap: 16px; grid-template-columns: minmax(0, 1fr) 380px; }
+}
+@media (max-width: 899px) {
+  /* colonna che scorre: flex, non grid, altrimenti la griglia (altezza definita) comprime le card */
+  .main { display: flex; flex-direction: column; padding: calc(var(--topbar-h) + 4px) 8px 8px; gap: 8px; }
+  .main > * { flex: 0 0 auto; }
+  .ctrl-pill { padding: 0 10px; }
+}
+
+/* card: superficie solida sotto 1920px (T4: niente blur), vetro sopra */
+.card {
+  position: relative;
+  min-width: 0;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--hairline);
+  background: var(--surface-container);
+  padding: 14px 16px;
+}
+@media (min-width: 1920px) {
+  .card {
+    background: rgba(30, 40, 61, 0.9);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ---------------------------------------------------------------- stati */
+.skeleton .sk {
+  background: linear-gradient(90deg, var(--surface-high) 0%, var(--surface-highest) 50%, var(--surface-high) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--r-md);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+.empty-wrap { grid-column: 1 / -1; display: grid; place-items: center; }
+.empty-card {
+  max-width: 420px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 28px 24px;
+}
+.empty-card .empty-ico {
+  width: 56px; height: 56px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--surface-high); color: var(--secondary);
+}
+.empty-card .empty-ico svg { width: 28px; height: 28px; }
+.empty-card h2 { font-family: var(--font-head); font-weight: 600; font-size: 20px; line-height: 28px; }
+.empty-card p { color: var(--on-surface-variant); }
+
+.conn-banner {
+  position: absolute; z-index: 35;
+  top: calc(var(--topbar-h) + 4px); left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 8px 8px 16px;
+  border-radius: var(--r-full);
+  background: var(--error-container); color: var(--on-error-container);
+  border: 1px solid rgba(255, 180, 171, 0.4);
+  font-weight: 500;
+}
+.conn-banner button {
+  height: 36px; padding: 0 14px; border-radius: var(--r-full);
+  background: rgba(255, 255, 255, 0.14); font-weight: 600;
+}
+
+#toast-root {
+  position: fixed; left: 0; right: 0; bottom: 16px; z-index: 80;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  max-width: min(520px, 92vw);
+  padding: 12px 18px;
+  border-radius: var(--r-lg);
+  background: var(--surface-highest);
+  border: 1px solid var(--hairline-hi);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: toast-in 200ms ease-out;
+}
+.toast.error { border-color: var(--error); background: var(--error-container); color: var(--on-error-container); }
+@keyframes toast-in { from { transform: translateY(12px); opacity: 0; } }
+
+/* modal di aiuto */
+.modal-scrim {
+  position: fixed; inset: 0; z-index: 70;
+  display: grid; place-items: center;
+  background: rgba(10, 13, 20, 0.75);
+}
+.modal {
+  width: min(520px, 92vw); max-height: 88vh; overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 22px;
+  border-radius: var(--r-xl);
+  background: var(--surface-high);
+  border: 1px solid var(--hairline-hi);
+}
+.modal h2 { font-family: var(--font-head); font-weight: 600; font-size: 20px; line-height: 28px; margin-bottom: 10px; }
+.modal ul { padding-left: 18px; display: grid; gap: 8px; color: var(--on-surface-variant); }
+.modal .modal-foot { margin-top: 16px; display: flex; justify-content: flex-end; }
+
+#debug-log {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 38%; z-index: 90; overflow: auto;
+  padding: 8px 10px; margin: 0;
+  font-family: var(--font-mono); font-size: 10px; line-height: 14px;
+  background: rgba(0, 0, 0, 0.88); color: var(--tertiary); white-space: pre-wrap;
+  user-select: text;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

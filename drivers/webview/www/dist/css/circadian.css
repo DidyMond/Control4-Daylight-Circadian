@@ -1,0 +1,128 @@
+/* ============================================================
+ * circadian.css - curva SVG, marker, glow, azioni rapide, scheda configurazione
+ * ============================================================ */
+
+/* ---------------------------------------------------------------- scheda curva */
+.curve-card {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0; overflow: hidden;
+}
+.curve-head {
+  position: relative; z-index: 2;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.curve-head h1 { font-family: var(--font-head); font-weight: 600; font-size: 18px; line-height: 24px; }
+.curve-head .sub { color: var(--outline); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+.live-readout {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.03em;
+  color: var(--secondary);
+}
+.live-readout .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--secondary); box-shadow: 0 0 8px rgba(255, 185, 95, 0.8); }
+
+/* banner di simulazione: vive nell'intestazione della scheda (non sotto la TopBar: su 532px
+   di altezza non c'e' spazio per una riga in piu') */
+.sim-banner {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 28px; padding: 0 12px;
+  border-radius: var(--r-full);
+  background: rgba(147, 0, 10, 0.4);
+  border: 1px solid var(--error-container);
+  color: var(--on-error-container);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+}
+.sim-banner .rec { width: 8px; height: 8px; border-radius: 50%; background: var(--error); animation: pulse 1.2s ease-in-out infinite; }
+
+.chart-wrap { position: relative; flex: 1 1 auto; min-height: 180px; }
+.chart-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  border-radius: var(--r-md);
+  background: radial-gradient(var(--glow-r, 60%) 70% at 50% 100%, var(--glow-color, rgba(255, 185, 95, 0.14)), transparent 70%);
+  transition: background 600ms ease;
+}
+svg.chart { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; overflow: visible; touch-action: none; }
+
+/* griglia e assi */
+.chart .grid { stroke: var(--hairline); stroke-width: 1; opacity: 0.6; }
+.chart .grid.h { stroke-dasharray: 0; opacity: 0.35; }
+.chart .axis-l { fill: var(--outline); font-family: var(--font-mono); font-size: 10px; }
+.chart .axis-r { fill: var(--tertiary); font-family: var(--font-mono); font-size: 10px; opacity: 0.45; transition: opacity 300ms; }
+.chart.ct-reveal .axis-r { opacity: 1; }
+.chart .hour { fill: var(--outline); font-family: var(--font-mono); font-size: 10px; text-anchor: middle; }
+.chart .k-label { fill: var(--on-surface-variant); font-family: var(--font-mono); font-size: 10px; font-weight: 600; text-anchor: middle; }
+
+/* curve */
+.chart .curve-b { fill: none; stroke: var(--primary); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.chart .curve-area { stroke: none; }
+.chart .curve-ct { fill: none; stroke: var(--tertiary); stroke-width: 2.5; stroke-linejoin: round; opacity: 0; transition: opacity 300ms; }
+.chart.ct-reveal .curve-ct { opacity: 0.8; }
+.chart .ct-bar { rx: 5; }
+.chart .ct-hit { fill: transparent; cursor: pointer; }
+
+/* modalita' dello scheduler: la parte non usata si attenua */
+.chart.mode-cct .curve-b, .chart.mode-cct .curve-area { opacity: 0.35; }
+.chart.mode-b .ct-bar, .chart.mode-b .k-label { opacity: 0.35; }
+
+/* linee astronomiche */
+.chart .astro-line { stroke: var(--tertiary); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.7; }
+.chart .astro-tag rect { fill: rgba(0, 56, 36, 0.85); stroke: rgba(78, 222, 163, 0.5); stroke-width: 1; }
+.chart .astro-tag text { fill: var(--tertiary); font-family: var(--font-mono); font-size: 10px; font-weight: 600; text-anchor: middle; }
+
+/* marker SP */
+.chart .sp { cursor: grab; }
+.chart .sp .hit { fill: transparent; }               /* 48px di bersaglio attorno al cerchio da 12 */
+.chart .sp .dot { fill: var(--secondary); stroke: var(--tier1); stroke-width: 2.5; }
+.chart .sp .halo { fill: rgba(255, 185, 95, 0.18); }
+.chart .sp.active .dot { fill: var(--on-surface); stroke: var(--secondary); stroke-width: 3; }
+.chart .sp.pending { opacity: 0.55; }
+.chart .sp.locked { cursor: default; }
+.chart .sp-tip rect { fill: var(--tier3); stroke: var(--secondary); stroke-width: 1; }
+.chart .sp-tip text { fill: var(--secondary); font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-anchor: middle; }
+
+/* adesso / anteprima */
+.chart .now-line { stroke: var(--secondary); stroke-width: 1; opacity: 0.55; }
+.chart .now-dot { fill: var(--secondary); stroke: var(--tier1); stroke-width: 2; }
+.chart .pv-line { stroke: var(--error); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.chart .pv-dot { fill: var(--error-container); stroke: var(--error); stroke-width: 2.5; }
+.chart .pv-tip rect { fill: var(--error-container); stroke: var(--error); stroke-width: 1; }
+.chart .pv-tip text { fill: var(--on-error-container); font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-anchor: middle; }
+
+/* ---------------------------------------------------------------- azioni rapide */
+.actions { position: relative; z-index: 2; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 2px; }
+
+/* ---------------------------------------------------------------- scheda configurazione */
+.config-card {
+  background: var(--tier2);
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+}
+.cfg-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cfg-head h2 { font-family: var(--font-head); font-weight: 600; font-size: 15px; line-height: 20px; }
+.cfg-sec { display: grid; gap: 6px; }
+.ct-sliders .slider { height: var(--touch-min); }            /* 48px: bersaglio minimo, thumb da 28 */
+.cfg-sec .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.cfg-sec .sec-head .mono { color: var(--on-surface-variant); font-size: 11px; }
+.ct-sliders { display: grid; gap: 6px; }
+.ct-sliders .slider-box { padding-top: 6px; }
+.ct-sliders .slider-box .row .lbl { color: var(--on-surface-variant); font-size: 12px; }
+.pts-box { padding: 6px 8px; border-radius: var(--r-lg); background: var(--canvas); border: 1px solid var(--hairline); }
+
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  border-radius: inherit;
+  background: rgba(14, 19, 32, 0.78);
+  color: var(--primary); font-size: 13px; text-align: center; padding: 16px;
+}
+.lock-overlay svg { width: 28px; height: 28px; }
+.config-card.locked > :not(.lock-overlay) { opacity: 0.45; pointer-events: none; }
+
+/* ---------------------------------------------------------------- phone (< 900px)
+   colonna singola che scorre: il grafico non deve restare schiacciato. Sta qui (e non in
+   layout.css) perche' deve venire DOPO le regole base di .curve-card / .chart-wrap. */
+@media (max-width: 899px) {
+  .curve-card { overflow: visible; }
+  .chart-wrap { flex: 0 0 auto; height: 300px; min-height: 300px; }
+  .config-card { overflow: visible; }
+}

@@ -1,0 +1,181 @@
+<devicedata>
+
+  <copyright>Copyright 2026 Davide Dimo. Released under the MIT License.</copyright>
+  <version>261015001</version>
+  <name>Daylight Circadian Webview</name>
+  <manufacturer>Open Source</manufacturer>
+  <model>Daylight Circadian Webview</model>
+  <creator>Davide Dimo</creator>
+  <created>2026-10-10 12:00</created>
+  <modified>2026-10-15 12:00</modified>
+  <minimum_os_version>3.3.0</minimum_os_version>
+  <proxies qty="1">
+    <proxy
+      proxybindingid="5001"
+      name="Daylight Circadian Webview"
+      image_source="c4z"
+      small_image="icons/icon_16.gif"
+      large_image="icons/icon_32.gif">uibutton</proxy>
+  </proxies>
+  <small image_source="c4z">icons/icon_16.gif</small>
+  <large image_source="c4z">icons/icon_32.gif</large>
+  <driver>DriverWorks</driver>
+  <control>lua_gen</control>
+  <controlmethod>ip</controlmethod>
+  <composer_categories>
+    <catagory>Lighting</catagory>
+  </composer_categories>
+  <states />
+  <conditionals />
+  <events />
+  <config>
+    <SINGLETON_ID>daylight_circadian_webview</SINGLETON_ID>
+    <properties>
+      <property>
+        <name>-DriverInformation</name>
+        <type>LABEL</type>
+        <default>Driver Information</default>
+      </property>
+      <property>
+        <name>Driver Version</name>
+        <type>STRING</type>
+        <default>261015001</default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Operational Mode</name>
+        <type>STRING</type>
+        <default>Unknown</default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Language</name>
+        <tooltip>Project locale used by the webview (Italian or English; English if the locale is not supported)</tooltip>
+        <type>STRING</type>
+        <default></default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Controllers</name>
+        <tooltip>Circadian controllers bound to this webview (updated automatically)</tooltip>
+        <type>STRING</type>
+        <default>0</default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>-LogSettings</name>
+        <type>LABEL</type>
+        <default>Log Settings - Support Use Only</default>
+      </property>
+      <property>
+        <name>Log Mode</name>
+        <type>LIST</type>
+        <items>
+          <item>Off</item>
+          <item>Print</item>
+          <item>Log</item>
+          <item>Print and Log</item>
+        </items>
+        <default>Off</default>
+        <readonly>false</readonly>
+      </property>
+      <property>
+        <name>Log Level</name>
+        <type>LIST</type>
+        <items>
+          <item>0 - Alert</item>
+          <item>1 - Error</item>
+          <item>2 - Warning</item>
+          <item>3 - Info</item>
+          <item>4 - Trace</item>
+          <item>5 - Debug</item>
+        </items>
+        <default>3 - Info</default>
+        <readonly>false</readonly>
+      </property>
+    </properties>
+
+    <actions>
+      <action>
+        <name>Rebuild WebView</name>
+        <command>REBUILD_WEBVIEW</command>
+      </action>
+      <action>
+        <name>Clear Touchscreen Cache</name>
+        <command>RESET_TS</command>
+        <params>
+          <param>
+            <name>Touch Screen</name>
+            <type>DEVICE_SELECTOR</type>
+            <items>
+              <item>uidevice_glassedge7.c4i</item>
+              <item>uidevice_glassedge7p.c4i</item>
+              <item>uidevice_glassedge10.c4i</item>
+              <item>uidevice_glassedge10p.c4i</item>
+              <item>uidevice_ts_t4_inwall10.c4i</item>
+              <item>uidevice_ts_t4_inwall8.c4i</item>
+              <item>uidevice_ts_t4_tabletop10.c4i</item>
+              <item>uidevice_ts_t4_tabletop8.c4i</item>
+            </items>
+            <multiselect>true</multiselect>
+          </param>
+        </params>
+      </action>
+      <action>
+        <name>List Controllers</name>
+        <command>LIST_CONTROLLERS</command>
+      </action>
+    </actions>
+
+    <commands />
+
+    <script file="driver.lua" encryption="0" jit="1" />
+  </config>
+
+  <capabilities>
+    <driver_name>daylight_circadian_webview</driver_name>
+    <web_view_url proxybindingid="5001">controller://driver/daylight_circadian_webview/dist/index.html</web_view_url>
+    <mobile_web_view_enabled>true</mobile_web_view_enabled>
+    <navigator_display_option proxybindingid="5001">
+      <display_icons>
+        <Icon width="300" height="300">controller://driver/daylight_circadian_webview/icons/icon_300.png</Icon>
+        <Icon width="70" height="70">controller://driver/daylight_circadian_webview/icons/icon_70.png</Icon>
+        <Icon width="90" height="90">controller://driver/daylight_circadian_webview/icons/icon_90.png</Icon>
+      </display_icons>
+    </navigator_display_option>
+  </capabilities>
+
+  <connections>
+    <connection>
+      <id>1</id>
+      <facing>6</facing>
+      <connectionname>Interdriver Comms Interface</connectionname>
+      <type>1</type>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>DAYLIGHT_CIRCADIAN_COMMS</classname>
+          <autobind>True</autobind>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>5001</id>
+      <type>2</type>
+      <facing>6</facing>
+      <connectionname>UIBUTTON</connectionname>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>False</linelevel>
+      <classes>
+        <class>
+          <classname>UIBUTTON</classname>
+        </class>
+      </classes>
+    </connection>
+  </connections>
+</devicedata>
